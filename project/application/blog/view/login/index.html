@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="login page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__PUBLIC__/index/style/bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/font-awesome.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__PUBLIC__/index/style/beyond.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/demo.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/animate.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container animated fadeInDown">
+        <form action="" method="post">
+            <div class="loginbox bg-white">
+                <div class="loginbox-title">登录页面</div>
+                <!--用户名-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="username" placeholder="用户名" name="username" type="text">
+                </div>
+                <!--密码-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="password" placeholder="密码" name="password" type="text">
+                </div>
+                <!--验证码-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="card" placeholder="验证码" name="card" type="text">
+                    <br/>
+                    <img src="{:url('login/verify')}" id="verify">
+                </div>
+                <!--登录-->
+                <div class="loginbox-submit">
+                    <input class="btn btn-primary btn-block" id="btn" value="登录" type="submit">
+                </div>
+            </div>
+            <!--注册-->
+            <div class="logobox">
+                <p class="text-center">没有账号请点击&nbsp;<button>注册</button></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<!--Basic Scripts-->
+<script src="__PUBLIC__/index/style/jquery.js"></script>
+<script src="__PUBLIC__/index/style/bootstrap.js"></script>
+<script src="__PUBLIC__/index/style/jquery_002.js"></script>
+<!--Beyond Scripts-->
+<script src="__PUBLIC__/index/style/beyond.js"></script>
+
+<script>
+    //点击验证码切换
+    $("#verify").click(function () {
+        var pic="{:url('login/verify')}";
+        $(this).attr('src',pic);
+    })
+    //点击登录
+    $("#btn").click(function () {
+        //滤掉空格$.trim();
+        var username=$.trim($('#username').val());
+        var password=$.trim($('#password').val());
+        var card=$.trim($('#card').val());
+        var num=0;
+        var str='';
+        //判断文本框输入的值是否为空值
+        if(username==''){
+            str+='用户名为空';
+            num++;
+        }
+        if(password==''){
+            str+='密码为空';
+            num++;
+        }
+        if(card==''){
+            str+='验证码为空';
+            num++;
+        }
+        //如果为空报错
+        if(num>0){
+            alert(str);
+            return;
+        }
+        //如果不为空向后台发送ajax请求
+        $.ajax({
+            url:"{:url('login/login')}",
+            type:'post',
+            data:{
+                'username':username,
+                'password':password,
+                'card':card
+            },
+            dataType:'json',
+            success:function (res) {
+                if(res.static==1){
+                    window.location.href = 'http://www.project.com/blog/index/index';
+                    alert("登录成功");
+                }else{
+                    alert("登录失败");
+                }
+            }
+        })
+    })
+</script>

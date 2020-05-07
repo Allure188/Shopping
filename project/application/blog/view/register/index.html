@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="login page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__PUBLIC__/index/style/bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/font-awesome.css" rel="stylesheet">
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__PUBLIC__/index/style/beyond.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/demo.css" rel="stylesheet">
+    <link href="__PUBLIC__/index/style/animate.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container animated fadeInDown">
+        <form action="" method="post">
+            <div class="loginbox bg-white">
+                <div class="loginbox-title">注册页面</div>
+                <!--用户名-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="username" placeholder="用户名" name="username" type="text">
+                </div>
+                <!--密码-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="password" placeholder="密码" name="password" type="text">
+                </div>
+                <!--确认密码-->
+                <div class="loginbox-textbox">
+                    <input class="form-control" id="confirm" placeholder="确认密码" name="confirm" type="text">
+                </div>
+                <!--注册-->
+                <div class="loginbox-submit">
+                    <input class="btn btn-primary btn-block" id="btn" value="注册" type="submit">
+                </div>
+            </div>
+            <!--返回登录-->
+            <div class="logobox">
+                <p class="text-center">我不想注册了点击&nbsp;<button>返回登录</button></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<!--Basic Scripts-->
+<script src="__PUBLIC__/index/style/jquery.js"></script>
+<script src="__PUBLIC__/index/style/bootstrap.js"></script>
+<script src="__PUBLIC__/index/style/jquery_002.js"></script>
+<!--Beyond Scripts-->
+<script src="__PUBLIC__/index/style/beyond.js"></script>
+
+<script>
+    //点击注册
+    $("#btn").click(function () {
+        //滤掉空格$.trim();
+        var username=$.trim($('#username').val());
+        var password=$.trim($('#password').val());
+        var confirm=$.trim($('#confirm').val());
+        var num=0;
+        var str='';
+        //判断文本框输入的值是否为空值
+        if(username==''){
+            str+='用户名为空';
+            num++;
+        }
+        if(password==''){
+            str+='密码为空';
+            num++;
+        }
+        if(confirm==''){
+            str+='确认码为空';
+            num++;
+        }
+        //如果为空报错
+        if(num>0){
+            alert(str);
+            return;
+        }
+        //如果不为空向后台发送ajax请求
+        $.ajax({
+            url:"{:url('register/register')}",
+            type:'post',
+            data:{
+                'username':username,
+                'password':password,
+                'confirm':confirm,
+            },
+            dataType:'json',
+            success:function (res) {
+                if(res.static==1){
+                    window.location.href = 'http://www.blog.com/blog/login/index';
+                    alert("注册成功");
+                }else{
+                    alert(res.msg);
+                }
+            }
+        })
+    })
+</script>
